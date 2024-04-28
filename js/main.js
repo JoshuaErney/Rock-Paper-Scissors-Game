@@ -58,16 +58,22 @@ function playRound(userSelection, computerSelection) {
   // Return the updated scores
   return [playerWinCount, computerWinCount];
 }
-// Step #3 - Write a NEW function called game(). Use the previous function inside of this one to play a best-of-five game that keeps score and reports a winner or loser at the end.
-function game() {
-  while (playerWinCount < 5 && computerWinCount < 5) {
-    [playerWinCount, computerWinCount] = playRound();
-  }
 
-  if (playerWinCount === 5) {
-    console.log("Congratulations! You won the best-of-five series!");
-  } else {
-    console.log("Sorry, the computer won the best-of-five series.");
-  }
-}
-game();
+// Create button group div and then buttons on the page for each choice the player can make
+const body = document.querySelector("body");
+
+// Creates and Adds Div element to body tag
+const btnGroup = document.createElement("div");
+body.appendChild(btnGroup);
+
+// Adds "btnGroup" class to div element
+btnGroup.classList.add("btnGroup");
+
+// Creates and Adds Button as Child to the button group div
+const btn = document.createElement("button");
+btn.textContent = "";
+btnGroup.appendChild(btn);
+
+// Creates and Adds Results Div to body tag
+const resultContainer = document.createElement("div");
+body.appendChild(resultContainer);
