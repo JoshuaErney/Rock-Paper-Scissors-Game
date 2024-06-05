@@ -1,27 +1,23 @@
-// Step #1 - Your game is going to play against the computer, so begin with a function called getComputerChoice that will randomly return either ‘Rock’, ‘Paper’ or ‘Scissors’.
+const choices = ["Rock", "Paper", "Scissors"];
 
 function getComputerChoice() {
-  const choices = ["Rock", "Paper", "Scissors"];
   let num = Math.floor(Math.random() * 3);
   return choices[num].toLowerCase();
 }
 
-// Step #2 - Write a function that plays a single round of Rock Paper Scissors. The function should take two parameters - the playerSelection and computerSelection - and then return a string that declares the winner of the round like so: "You Lose! Paper beats Rock"
-
 let playerWinCount = 0;
 let computerWinCount = 0;
 
-function playRound(userSelection, computerSelection) {
-  computerSelection = getComputerChoice();
-  userSelection = prompt(
-    "Please choose one of the following options: Rock, Paper or Scissors"
-  );
+function playRound(userChoice, computerSelection) {
+  if (typeof computerSelection === "undefined") {
+    computerSelection = getComputerChoice();
+  }
 
-  switch (userSelection) {
+  switch (userChoice) {
     case "rock":
       if (computerSelection === "rock") {
         console.log("It's a tie, play again!");
-        playRound(); // Bonus Points: Account for TIES by re-playing the round.
+        playRound(userChoice); // Re-play the round with the same user choice
       } else if (computerSelection === "paper") {
         console.log("The player lost! Paper beats Rock, try again.");
         ++computerWinCount;
@@ -33,7 +29,7 @@ function playRound(userSelection, computerSelection) {
     case "paper":
       if (computerSelection === "paper") {
         console.log("It's a tie, play again!");
-        playRound(); // Bonus Points: Account for TIES by re-playing the round.
+        playRound(userChoice); // Re-play the round with the same user choice
       } else if (computerSelection === "scissors") {
         console.log("The player lost! Scissors beat Paper, try again.");
         ++computerWinCount;
@@ -45,7 +41,7 @@ function playRound(userSelection, computerSelection) {
     case "scissors":
       if (computerSelection === "scissors") {
         console.log("It's a tie, play again!");
-        playRound(); // Bonus Points: Account for TIES by re-playing the round.
+        playRound(userChoice); // Re-play the round with the same user choice
       } else if (computerSelection === "paper") {
         console.log("The player wins! Scissors beats Paper.");
         ++playerWinCount;
@@ -55,25 +51,47 @@ function playRound(userSelection, computerSelection) {
       }
       break;
   }
-  // Return the updated scores
+
+  console.log(`Player: ${playerWinCount}, Computer: ${computerWinCount}`);
   return [playerWinCount, computerWinCount];
 }
 
-// Create button group div and then buttons on the page for each choice the player can make
 const body = document.querySelector("body");
 
-// Creates and Adds Div element to body tag
-const btnGroup = document.createElement("div");
-body.appendChild(btnGroup);
-
-// Adds "btnGroup" class to div element
-btnGroup.classList.add("btnGroup");
-
-// Creates and Adds Button as Child to the button group div
-const btn = document.createElement("button");
-btn.textContent = "";
-btnGroup.appendChild(btn);
-
-// Creates and Adds Results Div to body tag
+// Creating Elements
 const resultContainer = document.createElement("div");
+const btnGroup = document.createElement("div");
+
+// Adding identifiers to elements
+btnGroup.classList.add("btnGroup");
+resultContainer.classList.add("results");
+
+function createButtons() {
+  document.body.appendChild(btnGroup);
+  for (let i = 0; i < choices.length; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = `Select ${choices[i]}`;
+    btn.setAttribute("id", `${choices[i].toLowerCase()}`);
+    btnGroup.appendChild(btn);
+  }
+}
+createButtons();
+
+function userChoice(choice) {
+  const result = playRound(choice);
+  resultContainer.textContent = `Player: ${result[0]} - Computer: ${result[1]}`;
+}
+
+// Add event listeners to buttons
+document
+  .querySelector("#rock")
+  .addEventListener("click", () => userChoice("rock"));
+document
+  .querySelector("#paper")
+  .addEventListener("click", () => userChoice("paper"));
+document
+  .querySelector("#scissors")
+  .addEventListener("click", () => userChoice("scissors"));
+
+// Appends Elements to document
 body.appendChild(resultContainer);
